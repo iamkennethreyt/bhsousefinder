@@ -15,6 +15,18 @@ app.config(function($routeProvider) {
       templateUrl: "../views/addhouse.html",
       controller: "TodosController"
     })
+    .when("/signin", {
+      templateUrl: "../views/signin.html",
+      controller: "TodosController"
+    })
+    .when("/adminindex", {
+      templateUrl: "../views/adminindex.html",
+      controller: "TodosController"
+    })
+    .when("/signup", {
+      templateUrl: "../views/signup.html",
+      controller: "TodosController"
+    })
     .when("/placeAd", {
       templateUrl: "../views/placeAd.html"
     })

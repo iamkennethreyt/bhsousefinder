@@ -1,45 +1,35 @@
 <nav class="navbar navbar-expand-lg navbar-dark elegant-color-dark">
   <div class="container">
-    <a class="navbar-brand text-white" ng-click="changeLocatedIn('')">BhouseFinder</a>
+    <a class="navbar-brand" href="/#!/adminindex">BhouseFinder</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="basicExampleNav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" ng-repeat="loc in locatedin" ng-click="changeLocatedIn(loc)">
-          <a class="nav-link">{{loc}}
-          </a>
+        <li class="nav-item active">
+          <a class="nav-link" href="/#!/adminindex">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/#!/signin">Sign In
-          </a>
+          <a class="nav-link" href="/#!/addhouse">Add House</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#!/addhouse">Update Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" ng-click="signout()">Sign Out</a>
         </li>
     </div>
   </div>
 </nav>
-
-<!-- Section: Magazine v.1 -->
 <section class="magazine-section my-5 container">
-
-
-
-  <!-- Section heading -->
-  <!-- <h2 class="h1-responsive font-weight-bold text-center my-5">{{test}}</h2> -->
-  <!-- Section description -->
+  <h2 class="h1-responsive font-weight-bold text-center my-5">{{test}}</h2>
   <p class="text-center dark-grey-text w-responsive mx-auto mb-5">Duis aute irure dolor in reprehenderit in voluptate
     velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
     qui officia deserunt mollit id laborum.</p>
-
-  <div class="md-form mr-5 ml-5">
-    <i class="fa fa-search prefix text-dark active"></i>
-    <input type="text" id="form3" class="text-dark form-control" ng-model="searchVal">
-    <label for="form3" class="active">Search</label>
-  </div>
-
   <div class="">
     <div class="row">
-      <div class="col-lg-6 col-md-12 border" ng-repeat="bhouse in bhouses | filter: {locatedin:selectedlocatedin} | filter:{additionaldescriptions:searchVal}">
+      <div class="col-lg-6 col-md-12 border" ng-repeat="bhouse in bhouses | filter : {userID : user.ID}">
         <div class="single-news mb-4 pt-3">
           <div class="view overlay rounded z-depth-1-half mb-4">
             <img class="img-fluid" src="../themes/img/{{bhouse.image}}" alt="Sample image">
@@ -60,15 +50,13 @@
           <p class="dark-grey-text m-0"><strong>Posted By : </strong>{{bhouse.firstname}} {{bhouse.lastname}}</p>
           <p class="dark-grey-text m-0"><strong>Email : </strong>{{bhouse.email}}</p>
           <p class="dark-grey-text m-0"><strong>Details : </strong>{{bhouse.details}}</p>
+          <button class="btn btn-danger btn-sm" ng-click="onDelete(bhouse)">DELETE</button>
+          <button data-toggle="modal" data-target="#modalUpdate" class="btn btn-primary btn-sm" ng-click="onUpdate(bhouse)">Update</button>
         </div>
       </div>
     </div>
   </div>
-
 </section>
-<!-- Section: Magazine v.1 -->
-
-
 <footer class="page-footer font-small mdb-color elegant-color-dark pt-4">
   <div class="">
     <div class="row">
@@ -83,30 +71,51 @@
     </div>
 </footer>
 
-
 <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Add House</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Update House</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form ng-submit="onUpdateSubmit()">
-        <div class="modal-body mx-3">
-          <div class="md-form mb-5">
-            <i class="fa fa-user prefix grey-text"></i>
-            <input type="text" class="form-control validate" ng-model="title">
+      <form id="contact-form m-3" id="myform" ng-submit="onUpdateSubmit()">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <select class="custom-select" ng-model="selectedloc">
+                <option selected>Located in...</option>
+                <option ng-repeat="loc in locatedin" value="{{loc}}">{{loc}}</option>
+              </select>
+            </div>
           </div>
-          <div class="md-form mb-5">
-            <i class="fa fa-envelope prefix grey-text"></i>
-            <input type="text" class="form-control validate" ng-model="details">
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Rent Price" placeholder="Ren Price" ng-model="rentprice">
+            </div>
           </div>
-
         </div>
-        <div class="modal-footer d-flex justify-content-center">
-          <button class="btn btn-deep-orange">Update</button>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Facilities" ng-model="facilities">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Addtional Payment" ng-model="addpayment">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <textarea type="text" placeholder="Additional Description" rows="2" class="form-control" ng-model="addInfo"></textarea>
+        </div>
+        <div class="col-md-12 mt-3">
+          <textarea type="text" placeholder="Location Address" rows="2" class="form-control mb-3" ng-model="address"></textarea>
+        </div>
+        <div class="text-center text-md-left">
+          <button class="btn btn-primary" type="submit">Submit</button>
         </div>
       </form>
     </div>
